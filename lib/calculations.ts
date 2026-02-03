@@ -19,7 +19,7 @@ export function calculateCollectionMetrics(collection: {
   exchangeNote100baht: number;
   exchangeNote500baht: number;
   exchangeNote1000baht: number;
-  costPerPostcard: number | any;
+  costPerPostcard: number | string | { toNumber: () => number };
 }): CollectionCalculations {
   const machineTotal = collection.machineCoins10baht * 10;
   
