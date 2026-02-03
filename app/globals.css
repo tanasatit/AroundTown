@@ -1,19 +1,37 @@
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Kanit:wght@300;400;500;600;700&family=Mali:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@theme {
+  /* Thai Theme Colors */
+  --color-thai-gold: #D4AF37;
+  --color-thai-gold-dark: #B8941E;
+  --color-thai-red: #DC2626;
+  --color-thai-red-dark: #B91C1C;
+  --color-thai-cream: #FDF6E3;
+  --color-thai-cream-dark: #F5E6D3;
+  --color-thai-brown: #3E2723;
+  --color-thai-brown-light: #5D4037;
+  --color-thai-border: #D7CCC8;
+
+  /* Font families */
+  --font-display: "Fredoka", "Mali", sans-serif;
+  --font-body: "Kanit", "Sarabun", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Border radius */
+  --radius-thai: 12px;
+}
 
 @layer base {
   :root {
     --background: #FDF6E3;
     --foreground: #3E2723;
   }
-  
+
   body {
     @apply bg-thai-cream text-thai-brown font-body;
   }
-  
+
   h1, h2, h3, h4, h5, h6 {
     @apply font-display;
   }
@@ -23,15 +41,15 @@
   .btn-primary {
     @apply bg-thai-gold hover:bg-thai-gold-dark text-white px-6 py-3 rounded-thai font-medium transition-colors;
   }
-  
+
   .btn-secondary {
     @apply bg-thai-red hover:bg-thai-red-dark text-white px-6 py-3 rounded-thai font-medium transition-colors;
   }
-  
+
   .card {
     @apply bg-white rounded-thai border-2 border-thai-border p-6 shadow-sm;
   }
-  
+
   .input {
     @apply w-full px-4 py-2 border-2 border-thai-border rounded-thai focus:border-thai-gold focus:outline-none transition-colors;
   }
