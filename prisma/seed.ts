@@ -9,7 +9,7 @@ async function main() {
   
   // Create admin user
   const admin = await prisma.user.upsert({
-    where: { email: 'admin@miniemystery.com' },
+    where: { email: 'admin@minimystery.com' },
     update: {},
     create: {
       email: 'admin@minimystery.com',

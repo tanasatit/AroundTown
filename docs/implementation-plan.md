@@ -30,9 +30,9 @@ Current state: Can login at `/login`
 ## 🎯 Phase 4: Core Collection System
 
 ### PRP-001: Collection API Endpoints
-**Status**: Ready to implement  
-**File**: `prp/001-collection-api.md`  
-**Duration**: 2 hours  
+**Status**: ✅ COMPLETED (2026-02-04)
+**File**: `prp/001-collection-api.md`
+**Duration**: 2 hours
 **Dependencies**: None (auth is done)
 
 **What**: Create REST API for collection CRUD operations
@@ -53,10 +53,10 @@ Current state: Can login at `/login`
 ---
 
 ### PRP-002: Collection Entry Form
-**Status**: Blocked by PRP-001  
-**File**: `prp/002-collection-form.md`  
-**Duration**: 4 hours  
-**Dependencies**: PRP-001
+**Status**: 🎯 Ready to implement
+**File**: `prp/002-collection-form.md`
+**Duration**: 4 hours
+**Dependencies**: PRP-001 ✅
 
 **What**: Create form to enter new collection data
 - Machine coins input

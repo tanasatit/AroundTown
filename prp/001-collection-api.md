@@ -1,4 +1,4 @@
-# PRP-001: Collection API Endpoints
+# PRP-001: Collection API Endpoints ✅ COMPLETED
 
 ## Problem
 We need a reliable backend API to create, read, update, and delete collection records. The API must enforce business rules, validate inputs, and integrate calculation logic.
@@ -407,3 +407,27 @@ Then say: "Implement PRP-001. Follow claude.md and locked decisions."
 ---
 
 **Next PRP**: PRP-002 (Collection Entry Form) - builds UI on top of this API
+
+---
+
+## Completion Log
+
+**Completed**: 2026-02-04
+**Implemented by**: Claude Code
+
+### Files Created
+- `lib/validations/collection.ts` - Zod schemas
+- `app/api/collections/route.ts` - POST, GET handlers
+- `app/api/collections/[id]/route.ts` - GET, PUT, DELETE handlers
+
+### Test Results
+- ✅ POST create collection (201)
+- ✅ POST duplicate prevention (409)
+- ✅ POST validation errors (400)
+- ✅ GET list with pagination
+- ✅ GET filter by week/location
+- ✅ GET by ID (200)
+- ✅ GET not found (404)
+- ✅ PUT update (200)
+- ✅ DELETE (200)
+- ✅ Auth required (307 redirect)

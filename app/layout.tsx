@@ -3,7 +3,7 @@ import './globals.css';
 import SessionProvider from '@/components/providers/SessionProvider';
 
 export const metadata: Metadata = {
-  title: 'Mini Mystery - Cash Flow System',
+  title: 'See You AroundTown',
   description: 'Thai Postcard Vending Machine Management',
 };
 

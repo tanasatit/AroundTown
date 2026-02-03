@@ -1,7 +1,7 @@
 # Business Context
 
 ## Overview
-**SeeYou AroundTown** manages cash flow for Mini Mystery Thai Postcard vending machines.
+**SeeYou AroundTown** manages cash flow for AroundTown Mystery Thai Postcard vending machines.
 
 ## The Business Model
 

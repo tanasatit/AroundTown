@@ -41,7 +41,7 @@ export default function LoginPage() {
       <div className="card w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-display font-bold text-thai-gold mb-2">
-            Mini Mystery
+            AroundTown
           </h1>
           <p className="text-thai-brown-light">
             Thai Postcard Cash Flow System
