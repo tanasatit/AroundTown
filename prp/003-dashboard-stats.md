@@ -226,19 +226,19 @@ Replace the Next.js placeholder with a redirect to ensure the `(dashboard)` layo
 
 ## Acceptance Criteria
 
-- [ ] `/` shows dashboard (not Next.js placeholder) after login
-- [ ] `/` redirects to `/login` if not authenticated
-- [ ] 4 stat cards visible: Revenue, Postcards Sold, Profit, Inventory
-- [ ] Values reflect current week's collections
-- [ ] Trend shows delta and % vs last week
-- [ ] Trend is green (positive) or red (negative)
-- [ ] If last week has no data, trend shows "—"
-- [ ] Inventory shows total + per-location breakdown
-- [ ] Skeleton cards show while loading
-- [ ] Empty state shows if no collections exist
-- [ ] "New Collection" button links to `/collections/new`
-- [ ] No TypeScript errors
-- [ ] Build passes
+- [x] `/` shows dashboard (not Next.js placeholder) after login
+- [x] `/` redirects to `/login` if not authenticated
+- [x] 4 stat cards visible: Revenue, Postcards Sold, Profit, Inventory
+- [x] Values reflect current week's collections
+- [x] Trend shows delta and % vs last week
+- [x] Trend is green (positive) or red (negative)
+- [x] If last week has no data, trend shows "—"
+- [x] Inventory shows total + per-location breakdown
+- [x] Skeleton cards show while loading
+- [x] Empty state shows if no collections exist
+- [x] "New Collection" button links to `/collections/new`
+- [x] No TypeScript errors
+- [x] Build passes
 
 ---
 
