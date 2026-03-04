@@ -98,7 +98,7 @@ Current state: Can login at `/login`
 ---
 
 ### PRP-004: Collections History Table
-**Status**: 🎯 Ready to implement
+**Status**: ✅ COMPLETED (2026-03-04)
 **File**: `prp/004-history-table.md`  
 **Duration**: 3 hours  
 **Dependencies**: PRP-001

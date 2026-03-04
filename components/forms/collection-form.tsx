@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
-import { CalendarIcon, Loader2, Check, X, ChevronDown, ChevronUp } from "lucide-react";
+import { Loader2, Check, X, ChevronDown, ChevronUp } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -22,7 +21,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Calendar } from "@/components/ui/calendar";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -37,11 +35,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 
 function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -57,13 +50,12 @@ function useDebounce<T>(value: T, delay: number): T {
 export function CollectionForm() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [calendarOpen, setCalendarOpen] = useState(false);
   const [showRoundWeek, setShowRoundWeek] = useState(false);
 
   const form = useForm<CreateCollectionFormInput>({
     resolver: zodResolver(createCollectionSchema),
     defaultValues: {
-      collectionDate: format(new Date(), "yyyy-MM-dd"),
+      collectionDate: new Date().toISOString().split("T")[0],
       roundNumber: 1,
       weekNumber: getCurrentWeekNumber(),
       machineLocation: "",
@@ -124,20 +116,16 @@ export function CollectionForm() {
     };
   }, [debouncedValues]);
 
-  const handleDateSelect = useCallback(
-    (date: Date | undefined) => {
-      if (date) {
-        setValue("collectionDate", format(date, "yyyy-MM-dd"), {
-          shouldValidate: true,
-        });
-        const start = new Date(date.getFullYear(), 0, 1);
-        const weekNum = Math.floor((date.getTime() - start.getTime()) / (1000 * 60 * 60 * 24 * 7)) + 1;
-        setValue("weekNumber", weekNum, { shouldValidate: true });
-        setCalendarOpen(false);
-      }
-    },
-    [setValue]
-  );
+  function handleDateChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
+    setValue("collectionDate", value, { shouldValidate: true });
+    if (value) {
+      const date = new Date(value);
+      const start = new Date(date.getFullYear(), 0, 1);
+      const weekNum = Math.floor((date.getTime() - start.getTime()) / (1000 * 60 * 60 * 24 * 7)) + 1;
+      setValue("weekNumber", weekNum, { shouldValidate: true });
+    }
+  }
 
   const onSubmit = async (data: CreateCollectionFormInput) => {
     setIsSubmitting(true);
@@ -199,37 +187,14 @@ export function CollectionForm() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Date Picker */}
             <div className="space-y-2">
-              <Label>Collection Date</Label>
-              <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal",
-                      !watchedValues.collectionDate && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {watchedValues.collectionDate
-                      ? format(new Date(watchedValues.collectionDate), "PPP")
-                      : "Select date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={
-                      watchedValues.collectionDate
-                        ? new Date(watchedValues.collectionDate)
-                        : undefined
-                    }
-                    onSelect={handleDateSelect}
-                    disabled={(date) => date > new Date()}
-                    initialFocus
-                    className="rounded-lg border"
-                  />
-                </PopoverContent>
-              </Popover>
+              <Label htmlFor="collectionDate">Collection Date</Label>
+              <Input
+                id="collectionDate"
+                type="date"
+                max={new Date().toISOString().split("T")[0]}
+                value={watchedValues.collectionDate ?? ""}
+                onChange={handleDateChange}
+              />
               {errors.collectionDate && (
                 <p className="text-sm text-destructive">
                   {errors.collectionDate.message}

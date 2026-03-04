@@ -46,6 +46,8 @@ export const listCollectionsQuerySchema = z.object({
   week: z.coerce.number().int().min(1).nullish().transform(v => v ?? undefined),
   startDate: z.string().nullish().transform(v => v ?? undefined),
   endDate: z.string().nullish().transform(v => v ?? undefined),
+  sort: z.enum(['date', 'week', 'revenue', 'profit']).nullish().transform(v => v ?? 'date'),
+  order: z.enum(['asc', 'desc']).nullish().transform(v => v ?? 'desc'),
 });
 
 export type CreateCollectionInput = z.infer<typeof createCollectionSchema>;

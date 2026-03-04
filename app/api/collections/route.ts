@@ -93,6 +93,8 @@ export async function GET(request: NextRequest) {
       week: searchParams.get('week'),
       startDate: searchParams.get('startDate'),
       endDate: searchParams.get('endDate'),
+      sort: searchParams.get('sort'),
+      order: searchParams.get('order'),
     });
 
     if (!queryResult.success) {
@@ -102,7 +104,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { page, limit, location, week, startDate, endDate } = queryResult.data;
+    const { page, limit, location, week, startDate, endDate, sort, order } = queryResult.data;
 
     // Build where clause
     const where: {
@@ -129,10 +131,18 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    const sortOrder = order as 'asc' | 'desc';
+    const orderByMap = {
+      date:    { collectionDate: sortOrder },
+      week:    { weekNumber: sortOrder },
+      revenue: { machineCoins10baht: sortOrder },
+      profit:  { machineCoins10baht: sortOrder },
+    };
+
     const [collections, total] = await Promise.all([
       prisma.collection.findMany({
         where,
-        orderBy: { collectionDate: 'desc' },
+        orderBy: orderByMap[sort as keyof typeof orderByMap],
         skip: (page - 1) * limit,
         take: limit,
         include: {
