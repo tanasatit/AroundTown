@@ -122,7 +122,7 @@ Current state: Can login at `/login`
 ## 🎯 Phase 5: Refill Management
 
 ### PRP-005: Refill API Endpoints
-**Status**: Blocked by Phase 4  
+**Status**: ✅ COMPLETED (2026-03-04)
 **File**: `prp/005-refill-api.md`  
 **Duration**: 1.5 hours  
 **Dependencies**: Phase 4 complete
@@ -144,7 +144,7 @@ Current state: Can login at `/login`
 ---
 
 ### PRP-006: Refill Entry Form
-**Status**: Blocked by PRP-005  
+**Status**: ✅ REPLACED — integrated into /collections/new (2026-03-04)
 **File**: `prp/006-refill-form.md`  
 **Duration**: 2 hours  
 **Dependencies**: PRP-005
