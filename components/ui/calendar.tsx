@@ -85,12 +85,20 @@ function Calendar({
           defaultClassNames.caption_label
         ),
         table: "w-full border-collapse",
-        weekdays: cn("flex", defaultClassNames.weekdays),
+        // weekdays: cn("flex", defaultClassNames.weekdays),
+        // weekday: cn(
+        //   "text-muted-foreground flex-1 select-none rounded-md text-[0.8rem] font-normal",
+        //   defaultClassNames.weekday
+        // ),
+        // week: cn("mt-2 flex w-full", defaultClassNames.week),
+        weekdays: cn("flex justify-between", defaultClassNames.weekdays),
+
         weekday: cn(
-          "text-muted-foreground flex-1 select-none rounded-md text-[0.8rem] font-normal",
+          "text-muted-foreground w-9 select-none rounded-md text-[0.8rem] font-normal",
           defaultClassNames.weekday
         ),
-        week: cn("mt-2 flex w-full", defaultClassNames.week),
+
+        week: cn("flex w-full justify-between", defaultClassNames.week),
         week_number_header: cn(
           "w-[--cell-size] select-none",
           defaultClassNames.week_number_header

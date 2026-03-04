@@ -33,6 +33,7 @@ export const createCollectionSchema = z.object({
 
   postcardsRemaining: z.number().int().min(0, { message: 'Postcards remaining cannot be negative' }),
   costPerPostcard: z.number().min(1).max(50).default(13.766),
+  postcardsAdded: z.number().int().min(0).default(0).optional(),
   notes: z.string().optional(),
 });
 
@@ -48,5 +49,6 @@ export const listCollectionsQuerySchema = z.object({
 });
 
 export type CreateCollectionInput = z.infer<typeof createCollectionSchema>;
+export type CreateCollectionFormInput = z.input<typeof createCollectionSchema>;
 export type UpdateCollectionInput = z.infer<typeof updateCollectionSchema>;
 export type ListCollectionsQuery = z.infer<typeof listCollectionsQuerySchema>;
