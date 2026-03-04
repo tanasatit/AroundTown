@@ -130,6 +130,9 @@ export function CollectionForm() {
         setValue("collectionDate", format(date, "yyyy-MM-dd"), {
           shouldValidate: true,
         });
+        const start = new Date(date.getFullYear(), 0, 1);
+        const weekNum = Math.floor((date.getTime() - start.getTime()) / (1000 * 60 * 60 * 24 * 7)) + 1;
+        setValue("weekNumber", weekNum, { shouldValidate: true });
         setCalendarOpen(false);
       }
     },
@@ -464,15 +467,15 @@ export function CollectionForm() {
               </p>
             </div>
             <div className="p-4 rounded-lg bg-muted/50">
-              <p className="text-sm text-muted-foreground">Coins Count</p>
-              <p className="text-xl font-semibold">
-                {debouncedValues.machineCoins10baht || 0}
+              <p className="text-sm text-muted-foreground">Cost</p>
+              <p className="text-xl font-semibold text-destructive">
+                ฿{formatCurrency(calculations.cost)}
               </p>
             </div>
             <div className="p-4 rounded-lg bg-muted/50">
-              <p className="text-sm text-muted-foreground">Postcards Sold</p>
-              <p className="text-xl font-semibold">
-                {calculations.postcardsSold}
+              <p className="text-sm text-muted-foreground">Profit</p>
+              <p className="text-xl font-semibold text-green-500">
+                ฿{formatCurrency(calculations.profit)}
               </p>
             </div>
           </div>

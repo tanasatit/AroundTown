@@ -53,7 +53,7 @@ Current state: Can login at `/login`
 ---
 
 ### PRP-002: Collection Entry Form
-**Status**: 🎯 Ready to implement
+**Status**: ✅ COMPLETED (2026-03-04)
 **File**: `prp/002-collection-form.md`
 **Duration**: 4 hours
 **Dependencies**: PRP-001 ✅
@@ -76,7 +76,7 @@ Current state: Can login at `/login`
 ---
 
 ### PRP-003: Dashboard Stats Cards
-**Status**: Blocked by PRP-001  
+**Status**: 🎯 Ready to implement
 **File**: `prp/003-dashboard-stats.md`  
 **Duration**: 3 hours  
 **Dependencies**: PRP-001
@@ -98,7 +98,7 @@ Current state: Can login at `/login`
 ---
 
 ### PRP-004: Collections History Table
-**Status**: Blocked by PRP-001  
+**Status**: 🎯 Ready to implement
 **File**: `prp/004-history-table.md`  
 **Duration**: 3 hours  
 **Dependencies**: PRP-001

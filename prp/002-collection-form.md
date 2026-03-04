@@ -156,17 +156,17 @@ Components to use:
 
 ## Acceptance Criteria
 
-- [ ] Form renders at `/collections/new`
-- [ ] All required fields present
-- [ ] Real-time calculations update as user types
-- [ ] Machine coins validates divisible by 4
-- [ ] Exchange balance indicator shows correct status
-- [ ] Submit creates collection via API
-- [ ] Success shows toast and option to add another
-- [ ] Error shows message, preserves form data
-- [ ] Form is keyboard navigable
-- [ ] Dark theme styling matches design system
-- [ ] Mobile responsive
+- [x] Form renders at `/collections/new`
+- [x] All required fields present
+- [x] Real-time calculations update as user types
+- [x] Machine coins validates divisible by 4
+- [x] Exchange balance indicator shows correct status
+- [x] Submit creates collection via API
+- [x] Success shows toast and option to add another
+- [x] Error shows message, preserves form data
+- [x] Form is keyboard navigable
+- [x] Dark theme styling matches design system
+- [x] Mobile responsive
 
 ## Testing Checklist
 
