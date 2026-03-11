@@ -93,7 +93,7 @@ export function CollectionForm() {
     const exchangeTotal = EXCHANGE_DENOMINATIONS.reduce((sum, denom) => {
       const count = (debouncedValues as Record<string, number>)[denom.key] || 0;
       return sum + count * denom.value;
-    }, 0);
+    }, 0) + (debouncedValues.exchangeTransfer || 0);
 
     const exchangeBalanced = Math.abs(exchangeTotal - EXCHANGE_BALANCE_TARGET) < 1;
 
@@ -189,208 +189,240 @@ export function CollectionForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 
-      {/* Collection Details */}
-      <Card>
-        <CardHeader className="pb-4">
-          <CardTitle className="text-lg">Collection Details</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="collectionDate">Collection Date</Label>
-              <Input
-                id="collectionDate"
-                type="date"
-                max={new Date().toISOString().split("T")[0]}
-                value={watchedValues.collectionDate ?? ""}
-                onChange={handleDateChange}
-              />
-              {errors.collectionDate && (
-                <p className="text-sm text-destructive">{errors.collectionDate.message}</p>
-              )}
-            </div>
+      {/* 2-column grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-6 items-start">
 
-            <div className="space-y-2">
-              <Label>Machine Location</Label>
-              <Select
-                value={watchedValues.machineLocation}
-                onValueChange={(value) => setValue("machineLocation", value, { shouldValidate: true })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select location" />
-                </SelectTrigger>
-                <SelectContent>
-                  {MACHINE_LOCATIONS.map((location) => (
-                    <SelectItem key={location} value={location}>{location}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.machineLocation && (
-                <p className="text-sm text-destructive">{errors.machineLocation.message}</p>
-              )}
-            </div>
-          </div>
+        {/* LEFT COLUMN */}
+        <div className="space-y-6">
 
-          <div>
-            <button
-              type="button"
-              className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
-              onClick={() => setShowRoundWeek(!showRoundWeek)}
-            >
-              {showRoundWeek ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-              {showRoundWeek ? "Hide Round & Week" : "Show Round & Week"}
-            </button>
-
-            {showRoundWeek && (
-              <div className="grid grid-cols-2 gap-4 mt-3">
+          {/* Collection Details */}
+          <Card>
+            <CardHeader className="pb-4">
+              <CardTitle className="text-lg">Collection Details</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Round</Label>
-                  <div className="flex gap-2">
-                    {[1, 2].map((round) => (
-                      <Button
-                        key={round}
-                        type="button"
-                        variant={watchedValues.roundNumber === round ? "default" : "outline"}
-                        className="flex-1"
-                        onClick={() => setValue("roundNumber", round as 1 | 2, { shouldValidate: true })}
-                      >
-                        {round}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="weekNumber">Week</Label>
+                  <Label htmlFor="collectionDate">Collection Date</Label>
                   <Input
-                    id="weekNumber"
+                    id="collectionDate"
+                    type="date"
+                    max={new Date().toISOString().split("T")[0]}
+                    value={watchedValues.collectionDate ?? ""}
+                    onChange={handleDateChange}
+                  />
+                  {errors.collectionDate && (
+                    <p className="text-sm text-destructive">{errors.collectionDate.message}</p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Machine Location</Label>
+                  <Select
+                    value={watchedValues.machineLocation}
+                    onValueChange={(value) => setValue("machineLocation", value, { shouldValidate: true })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select location" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {MACHINE_LOCATIONS.map((location) => (
+                        <SelectItem key={location} value={location}>{location}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {errors.machineLocation && (
+                    <p className="text-sm text-destructive">{errors.machineLocation.message}</p>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <button
+                  type="button"
+                  className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={() => setShowRoundWeek(!showRoundWeek)}
+                >
+                  {showRoundWeek ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                  {showRoundWeek ? "Hide Round & Week" : "Show Round & Week"}
+                </button>
+
+                {showRoundWeek && (
+                  <div className="grid grid-cols-2 gap-4 mt-3">
+                    <div className="space-y-2">
+                      <Label>Round</Label>
+                      <div className="flex gap-2">
+                        {[1, 2].map((round) => (
+                          <Button
+                            key={round}
+                            type="button"
+                            variant={watchedValues.roundNumber === round ? "default" : "outline"}
+                            className="flex-1"
+                            onClick={() => setValue("roundNumber", round as 1 | 2, { shouldValidate: true })}
+                          >
+                            {round}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="weekNumber">Week</Label>
+                      <Input
+                        id="weekNumber"
+                        type="number"
+                        min={1}
+                        placeholder="Auto"
+                        {...register("weekNumber", { valueAsNumber: true })}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Machine */}
+          <Card>
+            <CardHeader className="pb-4">
+              <CardTitle className="text-lg">Machine</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="machineCoins10baht">10-baht Coins Count</Label>
+                <Input
+                  id="machineCoins10baht"
+                  type="number"
+                  min={0}
+                  step={4}
+                  placeholder="e.g. 300"
+                  {...register("machineCoins10baht", { valueAsNumber: true })}
+                  autoFocus
+                />
+                {errors.machineCoins10baht && (
+                  <p className="text-sm text-destructive">{errors.machineCoins10baht.message}</p>
+                )}
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 pt-2">
+                <div className="p-4 rounded-lg bg-muted/50">
+                  <p className="text-sm text-muted-foreground">Machine Total</p>
+                  <p className="text-2xl font-semibold text-thai-gold">฿{fmt(calculations.machineTotal)}</p>
+                </div>
+                <div className="p-4 rounded-lg bg-muted/50">
+                  <p className="text-sm text-muted-foreground">Postcards Sold</p>
+                  <p className="text-2xl font-semibold">{calculations.postcardsSold}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Exchange Box */}
+          <Card>
+            <CardHeader className="pb-4">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg">Exchange Box</CardTitle>
+                <Badge
+                  variant={calculations.exchangeBalanced ? "default" : "destructive"}
+                  className={cn(calculations.exchangeBalanced ? "bg-green-600 hover:bg-green-700" : "")}
+                >
+                  {calculations.exchangeBalanced
+                    ? <><Check className="mr-1 h-3 w-3" />Balanced</>
+                    : <><X className="mr-1 h-3 w-3" />Unbalanced</>
+                  }
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
+                {EXCHANGE_DENOMINATIONS.map((denom) => (
+                  <div key={denom.key} className="space-y-1">
+                    <Label htmlFor={denom.key} className="text-xs">{denom.label}</Label>
+                    <Input
+                      id={denom.key}
+                      type="number"
+                      min={0}
+                      className="h-9"
+                      placeholder="0"
+                      {...register(denom.key as keyof CreateCollectionInput, { valueAsNumber: true })}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="flex-1 space-y-1">
+                  <Label htmlFor="exchangeTransfer" className="text-xs">Bank Transfer / PromptPay (฿)</Label>
+                  <Input
+                    id="exchangeTransfer"
                     type="number"
-                    min={1}
-                    placeholder="Auto"
-                    {...register("weekNumber", { valueAsNumber: true })}
+                    min={0}
+                    className="h-9"
+                    placeholder="0"
+                    {...register("exchangeTransfer" as keyof CreateCollectionInput, { valueAsNumber: true })}
                   />
                 </div>
               </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
 
-      {/* Machine */}
-      <Card>
-        <CardHeader className="pb-4">
-          <CardTitle className="text-lg">Machine</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="machineCoins10baht">10-baht Coins Count</Label>
-            <Input
-              id="machineCoins10baht"
-              type="number"
-              min={0}
-              step={4}
-              placeholder="e.g. 300"
-              {...register("machineCoins10baht", { valueAsNumber: true })}
-              autoFocus
-            />
-            {errors.machineCoins10baht && (
-              <p className="text-sm text-destructive">{errors.machineCoins10baht.message}</p>
-            )}
-          </div>
+              <div className="p-4 rounded-lg bg-muted/50">
+                <p className="text-sm text-muted-foreground">Exchange Box Total</p>
+                <p className={cn("text-2xl font-semibold", calculations.exchangeBalanced ? "text-green-500" : "text-destructive")}>
+                  ฿{fmt(calculations.exchangeTotal)}
+                  <span className="text-sm font-normal text-muted-foreground ml-2">
+                    / ฿{fmt(EXCHANGE_BALANCE_TARGET)}
+                  </span>
+                </p>
+              </div>
+            </CardContent>
+          </Card>
 
-          <div className="grid grid-cols-2 gap-4 pt-2">
-            <div className="p-4 rounded-lg bg-muted/50">
-              <p className="text-sm text-muted-foreground">Machine Total</p>
-              <p className="text-2xl font-semibold text-thai-gold">฿{fmt(calculations.machineTotal)}</p>
-            </div>
-            <div className="p-4 rounded-lg bg-muted/50">
-              <p className="text-sm text-muted-foreground">Postcards Sold</p>
-              <p className="text-2xl font-semibold">{calculations.postcardsSold}</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+        </div>{/* end LEFT COLUMN */}
 
-      {/* Exchange Box */}
-      <Card>
-        <CardHeader className="pb-4">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-lg">Exchange Box</CardTitle>
-            <Badge
-              variant={calculations.exchangeBalanced ? "default" : "destructive"}
-              className={cn(calculations.exchangeBalanced ? "bg-green-600 hover:bg-green-700" : "")}
-            >
-              {calculations.exchangeBalanced
-                ? <><Check className="mr-1 h-3 w-3" />Balanced</>
-                : <><X className="mr-1 h-3 w-3" />Unbalanced</>
-              }
-            </Badge>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
-            {EXCHANGE_DENOMINATIONS.map((denom) => (
-              <div key={denom.key} className="space-y-1">
-                <Label htmlFor={denom.key} className="text-xs">{denom.label}</Label>
+        {/* RIGHT COLUMN */}
+        <div className="space-y-6 lg:sticky lg:top-6 lg:self-start">
+
+          {/* Inventory */}
+          <Card>
+            <CardHeader className="pb-4">
+              <CardTitle className="text-lg">Inventory</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="postcardsRemaining">Postcards Remaining in Machine</Label>
                 <Input
-                  id={denom.key}
+                  id="postcardsRemaining"
                   type="number"
                   min={0}
-                  className="h-9"
-                  placeholder="0"
-                  {...register(denom.key as keyof CreateCollectionInput, { valueAsNumber: true })}
+                  placeholder="e.g. 50"
+                  {...register("postcardsRemaining", { valueAsNumber: true })}
                 />
+                {errors.postcardsRemaining && (
+                  <p className="text-sm text-destructive">{errors.postcardsRemaining.message}</p>
+                )}
               </div>
-            ))}
-          </div>
 
-          <div className="p-4 rounded-lg bg-muted/50">
-            <p className="text-sm text-muted-foreground">Exchange Box Total</p>
-            <p className={cn("text-2xl font-semibold", calculations.exchangeBalanced ? "text-green-500" : "text-destructive")}>
-              ฿{fmt(calculations.exchangeTotal)}
-              <span className="text-sm font-normal text-muted-foreground ml-2">
-                / ฿{fmt(EXCHANGE_BALANCE_TARGET)}
-              </span>
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+              <div className="border-t pt-4">
+                <button
+                  type="button"
+                  className={cn(
+                    "flex items-center gap-2 text-sm font-medium transition-colors",
+                    showRefill ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                  )}
+                  onClick={() => setShowRefill(!showRefill)}
+                >
+                  <PackagePlus className="h-4 w-4" />
+                  {showRefill ? "Cancel refill" : "Refill postcards now?"}
+                </button>
+              </div>
+            </CardContent>
+          </Card>
 
-      {/* Inventory & Refill */}
-      <Card>
-        <CardHeader className="pb-4">
-          <CardTitle className="text-lg">Inventory</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="postcardsRemaining">Postcards Remaining in Machine</Label>
-            <Input
-              id="postcardsRemaining"
-              type="number"
-              min={0}
-              placeholder="e.g. 50"
-              {...register("postcardsRemaining", { valueAsNumber: true })}
-            />
-            {errors.postcardsRemaining && (
-              <p className="text-sm text-destructive">{errors.postcardsRemaining.message}</p>
-            )}
-          </div>
-
-          {/* Refill toggle */}
-          <div className="border-t pt-4">
-            <button
-              type="button"
-              className={cn(
-                "flex items-center gap-2 text-sm font-medium transition-colors",
-                showRefill ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-              )}
-              onClick={() => setShowRefill(!showRefill)}
-            >
-              <PackagePlus className="h-4 w-4" />
-              {showRefill ? "Cancel refill" : "Refill postcards now?"}
-            </button>
-
-            {showRefill && (
-              <div className="mt-4 space-y-3">
+          {/* Refill */}
+          {showRefill ? (
+            <Card>
+              <CardHeader className="pb-4">
+                <CardTitle className="text-lg">Refill</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="postcardsAdded">Postcards Added</Label>
                   <Input
@@ -419,71 +451,79 @@ export function CollectionForm() {
                     <p className="text-xl font-semibold text-green-500">{calculations.postcardsAfter}</p>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Summary */}
-      <Card>
-        <CardHeader className="pb-4">
-          <CardTitle className="text-lg">Summary</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-3 gap-4">
-            <div className="p-4 rounded-lg bg-muted/50">
-              <p className="text-sm text-muted-foreground">Revenue</p>
-              <p className="text-xl font-semibold text-thai-gold">฿{fmt(calculations.revenue)}</p>
-            </div>
-            <div className="p-4 rounded-lg bg-muted/50">
-              <p className="text-sm text-muted-foreground">Cost</p>
-              <p className="text-xl font-semibold text-destructive">฿{fmt(calculations.cost)}</p>
-            </div>
-            <div className="p-4 rounded-lg bg-muted/50">
-              <p className="text-sm text-muted-foreground">Profit</p>
-              <p className="text-xl font-semibold text-green-500">฿{fmt(calculations.profit)}</p>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="costPerPostcard">Cost per Postcard</Label>
-            <Input
-              id="costPerPostcard"
-              type="number"
-              step="0.001"
-              min={1}
-              max={50}
-              {...register("costPerPostcard", { valueAsNumber: true })}
-            />
-            {errors.costPerPostcard && (
-              <p className="text-sm text-destructive">{errors.costPerPostcard.message}</p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="notes">Notes (Optional)</Label>
-            <Textarea
-              id="notes"
-              placeholder="Any additional notes..."
-              {...register("notes")}
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Actions */}
-      <div className="flex justify-end gap-4">
-        <Button type="button" variant="outline" onClick={() => router.back()} disabled={isSubmitting}>
-          Cancel
-        </Button>
-        <Button type="submit" disabled={isSubmitting} className="min-w-[140px]">
-          {isSubmitting ? (
-            <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Saving...</>
+              </CardContent>
+            </Card>
           ) : (
-            showRefill ? "Save Collection & Refill" : "Save Collection"
+            <div className="border border-dashed rounded-lg p-4 text-center text-muted-foreground text-sm">
+              No refill this round
+            </div>
           )}
-        </Button>
+
+          {/* Summary */}
+          <Card>
+            <CardHeader className="pb-4">
+              <CardTitle className="text-lg">Summary</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-3 gap-3">
+                <div className="p-4 rounded-lg bg-muted/50">
+                  <p className="text-sm text-muted-foreground">Revenue</p>
+                  <p className="text-xl font-semibold text-thai-gold">฿{fmt(calculations.revenue)}</p>
+                </div>
+                <div className="p-4 rounded-lg bg-muted/50">
+                  <p className="text-sm text-muted-foreground">Cost</p>
+                  <p className="text-xl font-semibold text-destructive">฿{fmt(calculations.cost)}</p>
+                </div>
+                <div className="p-4 rounded-lg bg-muted/50">
+                  <p className="text-sm text-muted-foreground">Profit</p>
+                  <p className="text-xl font-semibold text-green-500">฿{fmt(calculations.profit)}</p>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="costPerPostcard">Cost per Postcard</Label>
+                <Input
+                  id="costPerPostcard"
+                  type="number"
+                  step="0.001"
+                  min={1}
+                  max={50}
+                  {...register("costPerPostcard", { valueAsNumber: true })}
+                />
+                {errors.costPerPostcard && (
+                  <p className="text-sm text-destructive">{errors.costPerPostcard.message}</p>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+        </div>{/* end RIGHT COLUMN */}
+
+      </div>{/* end 2-column grid */}
+
+      {/* Full-width: Notes + Actions */}
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="notes">Notes (Optional)</Label>
+          <Textarea
+            id="notes"
+            placeholder="Any additional notes..."
+            {...register("notes")}
+          />
+        </div>
+
+        <div className="flex justify-end gap-4">
+          <Button type="button" variant="outline" onClick={() => router.back()} disabled={isSubmitting}>
+            Cancel
+          </Button>
+          <Button type="submit" disabled={isSubmitting} className="min-w-[140px]">
+            {isSubmitting ? (
+              <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Saving...</>
+            ) : (
+              showRefill ? "Save Collection & Refill" : "Save Collection"
+            )}
+          </Button>
+        </div>
       </div>
     </form>
   );

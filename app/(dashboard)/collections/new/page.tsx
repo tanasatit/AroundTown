@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function NewCollectionPage() {
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-5xl mx-auto">
       <div className="mb-6">
         <h1 className="text-2xl font-display font-semibold">New Collection</h1>
         <p className="text-muted-foreground">

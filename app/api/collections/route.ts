@@ -57,6 +57,7 @@ export async function POST(request: NextRequest) {
         exchangeNote100baht: data.exchangeNote100baht,
         exchangeNote500baht: data.exchangeNote500baht,
         exchangeNote1000baht: data.exchangeNote1000baht,
+        exchangeTransfer:     data.exchangeTransfer,
         postcardsRemaining: data.postcardsRemaining,
         costPerPostcard: data.costPerPostcard,
         notes: data.notes,

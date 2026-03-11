@@ -30,6 +30,7 @@ export const createCollectionSchema = z.object({
   exchangeNote100baht: z.number().int().min(0).default(0),
   exchangeNote500baht: z.number().int().min(0).default(0),
   exchangeNote1000baht: z.number().int().min(0).default(0),
+  exchangeTransfer:     z.number().int().min(0).default(0),
 
   postcardsRemaining: z.number().int().min(0, { message: 'Postcards remaining cannot be negative' }),
   costPerPostcard: z.number().min(1).max(50).default(13.766),

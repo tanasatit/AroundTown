@@ -92,6 +92,12 @@ export function CollectionDetailModal({
                   );
                 })}
               </div>
+              {(collection.exchangeTransfer ?? 0) > 0 && (
+                <div className="flex justify-between text-sm py-0.5 mt-1">
+                  <span className="text-muted-foreground">Bank Transfer</span>
+                  <span>{fmt(collection.exchangeTransfer ?? 0)}</span>
+                </div>
+              )}
               <div className="border-t mt-2 pt-2">
                 <Row label="Total" value={fmt(collection.exchangeTotal)} />
               </div>
