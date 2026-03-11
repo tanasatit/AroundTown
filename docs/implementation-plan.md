@@ -27,7 +27,7 @@ Current state: Can login at `/login`
 
 ---
 
-## 🎯 Phase 4: Core Collection System
+## ✅ Phase 4: Core Collection System (COMPLETED)
 
 ### PRP-001: Collection API Endpoints
 **Status**: ✅ COMPLETED (2026-02-04)
@@ -119,7 +119,7 @@ Current state: Can login at `/login`
 
 ---
 
-## 🎯 Phase 5: Refill Management
+## ✅ Phase 5: Refill Management (COMPLETED)
 
 ### PRP-005: Refill API Endpoints
 **Status**: ✅ COMPLETED (2026-03-04)
@@ -167,7 +167,7 @@ Current state: Can login at `/login`
 ## 🎯 Phase 6: Analytics & Reports
 
 ### PRP-007: Dashboard Charts
-**Status**: Blocked by Phase 4  
+**Status**: 🎯 Next
 **File**: `prp/007-dashboard-charts.md`  
 **Duration**: 3 hours  
 **Dependencies**: Phase 4 complete
@@ -187,7 +187,7 @@ Current state: Can login at `/login`
 ---
 
 ### PRP-008: Reports Page
-**Status**: Blocked by Phase 6  
+**Status**: ⏳ Waiting — depends on PRP-007
 **File**: `prp/008-reports-page.md`  
 **Duration**: 4 hours  
 **Dependencies**: PRP-007
@@ -211,7 +211,7 @@ Current state: Can login at `/login`
 ## 🎯 Phase 7: Polish & UX
 
 ### PRP-009: Navigation & Layout
-**Status**: Blocked by Phase 4  
+**Status**: ⏳ Waiting — depends on Phase 6
 **File**: `prp/009-navigation.md`  
 **Duration**: 2 hours  
 **Dependencies**: Phase 4 complete
@@ -351,16 +351,16 @@ Current state: Can login at `/login`
 | Phase | PRPs | Duration | Status |
 |-------|------|----------|--------|
 | 0-3 | Setup | 6h | ✅ Done |
-| 4 | Collection System | 12h | 🎯 Next |
-| 5 | Refill System | 3.5h | ⏳ Waiting |
-| 6 | Analytics | 7h | ⏳ Waiting |
+| 4 | Collection System | 12h | ✅ Done |
+| 5 | Refill System | 3.5h | ✅ Done |
+| 6 | Analytics | 7h | 🎯 Next |
 | 7 | Polish | 7h | ⏳ Waiting |
 | 8 | Testing & Deploy | 7h | ⏳ Waiting |
-| **Total** | **14 PRPs** | **42.5h** | **14% done** |
+| **Total** | **14 PRPs** | **42.5h** | **43% done** |
 
-## Current Priority: PRP-001
+## Current Priority: PRP-007
 
-**Next Action**: Review `prp/001-collection-api.md`
+**Next Action**: Review `prp/007-dashboard-charts.md`
 
 **Command**: Ask Claude to review the PRP and lock decisions before implementation.
 
@@ -415,12 +415,12 @@ Tested: All endpoints working
 ## Quick Reference
 
 **Start Next PRP**:
-1. Open `prp/001-collection-api.md`
+1. Open `prp/007-dashboard-charts.md`
 2. Review with Claude
 3. Implement
 4. Test
 5. Commit
-6. Move to PRP-002
+6. Move to PRP-008
 
 **Stuck?**: 
 - Review `docs/` for business context
