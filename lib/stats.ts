@@ -48,6 +48,51 @@ function trend(current: number, previous: number) {
   return { delta, percent };
 }
 
+export interface ChartWeek {
+  weekNumber: number;
+  revenue: number;
+  profit: number;
+  postcardsSold: number;
+}
+
+export interface ChartData {
+  weeks: ChartWeek[];
+  hasEnoughData: boolean;
+}
+
+export async function getChartData(): Promise<ChartData> {
+  const currentWeek = getCurrentWeekNumber();
+  const startWeek = currentWeek - 7;
+
+  const rows = await prisma.collection.findMany({
+    where: { weekNumber: { gte: startWeek, lte: currentWeek } },
+  });
+
+  // Group by weekNumber
+  const byWeek = new Map<number, { revenue: number; profit: number; postcardsSold: number; hasData: boolean }>();
+  for (let w = startWeek; w <= currentWeek; w++) {
+    byWeek.set(w, { revenue: 0, profit: 0, postcardsSold: 0, hasData: false });
+  }
+  for (const row of rows) {
+    const m = calculateCollectionMetrics(row);
+    const existing = byWeek.get(row.weekNumber)!;
+    byWeek.set(row.weekNumber, {
+      revenue: existing.revenue + m.revenue,
+      profit: existing.profit + m.profit,
+      postcardsSold: existing.postcardsSold + m.postcardsSold,
+      hasData: true,
+    });
+  }
+
+  const weeks: ChartWeek[] = Array.from(byWeek.entries())
+    .sort(([a], [b]) => a - b)
+    .map(([weekNumber, data]) => ({ weekNumber, revenue: data.revenue, profit: data.profit, postcardsSold: data.postcardsSold }));
+
+  const weeksWithData = weeks.filter((w) => w.revenue > 0 || w.postcardsSold > 0).length;
+
+  return { weeks, hasEnoughData: weeksWithData >= 2 };
+}
+
 export async function getDashboardStats(): Promise<StatsData> {
   const currentWeek = getCurrentWeekNumber();
   const lastWeek = currentWeek - 1;

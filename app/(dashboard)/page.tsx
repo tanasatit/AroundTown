@@ -4,12 +4,19 @@ import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { StatsCards } from "@/components/dashboard/stats-cards";
 import { StatsCardsSkeleton } from "@/components/dashboard/stats-cards-skeleton";
-import { getDashboardStats } from "@/lib/stats";
+import { DashboardCharts } from "@/components/dashboard/dashboard-charts";
+import { DashboardChartsSkeleton } from "@/components/dashboard/dashboard-charts-skeleton";
+import { getDashboardStats, getChartData } from "@/lib/stats";
 import { getCurrentWeekNumber } from "@/lib/calculations";
 
 async function DashboardStats() {
   const data = await getDashboardStats();
   return <StatsCards data={data} />;
+}
+
+async function Charts() {
+  const data = await getChartData();
+  return <DashboardCharts data={data} />;
 }
 
 export default function DashboardPage() {
@@ -32,6 +39,10 @@ export default function DashboardPage() {
 
       <Suspense fallback={<StatsCardsSkeleton />}>
         <DashboardStats />
+      </Suspense>
+
+      <Suspense fallback={<DashboardChartsSkeleton />}>
+        <Charts />
       </Suspense>
     </div>
   );

@@ -167,7 +167,7 @@ Current state: Can login at `/login`
 ## 🎯 Phase 6: Analytics & Reports
 
 ### PRP-007: Dashboard Charts
-**Status**: 🎯 Next
+**Status**: ✅ COMPLETED (2026-03-11)
 **File**: `prp/007-dashboard-charts.md`  
 **Duration**: 3 hours  
 **Dependencies**: Phase 4 complete
@@ -187,7 +187,7 @@ Current state: Can login at `/login`
 ---
 
 ### PRP-008: Reports Page
-**Status**: ⏳ Waiting — depends on PRP-007
+**Status**: 🎯 Next
 **File**: `prp/008-reports-page.md`  
 **Duration**: 4 hours  
 **Dependencies**: PRP-007
@@ -353,7 +353,7 @@ Current state: Can login at `/login`
 | 0-3 | Setup | 6h | ✅ Done |
 | 4 | Collection System | 12h | ✅ Done |
 | 5 | Refill System | 3.5h | ✅ Done |
-| 6 | Analytics | 7h | 🎯 Next |
+| 6 | Analytics | 7h | 🚧 In Progress |
 | 7 | Polish | 7h | ⏳ Waiting |
 | 8 | Testing & Deploy | 7h | ⏳ Waiting |
 | **Total** | **14 PRPs** | **42.5h** | **43% done** |
