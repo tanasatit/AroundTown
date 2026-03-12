@@ -263,7 +263,7 @@ Current state: Can login at `/login`
 ## 🎯 Phase 8: Testing & Deployment
 
 ### PRP-012: End-to-End Testing
-**Status**: 🎯 Next
+**Status**: ✅ COMPLETED (2026-03-12)
 **File**: `prp/012-e2e-testing.md`  
 **Duration**: 3 hours  
 **Dependencies**: All features done
@@ -286,7 +286,7 @@ Current state: Can login at `/login`
 ---
 
 ### PRP-013: Production Deployment
-**Status**: ⏳ Waiting — depends on PRP-012
+**Status**: 🎯 Next
 **File**: `prp/013-deployment.md`  
 **Duration**: 2 hours  
 **Dependencies**: PRP-012
@@ -363,13 +363,13 @@ Current state: Can login at `/login`
 | 5 | Refill System | 3.5h | ✅ Done |
 | 6 | Analytics | 7h | ✅ Done |
 | 7 | Polish | 7h | ✅ Done (PRP-011 skipped) |
-| 8 | Testing & Deploy | 7h | 🎯 Next |
+| 8 | Testing & Deploy | 7h | 🚧 In Progress (1/3 done) |
 | 9 | Machine Management | 4h | ⏳ Post-launch |
-| **Total** | **15 PRPs** | **46.5h** | **73% done** |
+| **Total** | **15 PRPs** | **46.5h** | **80% done** |
 
-## Current Priority: PRP-012
+## Current Priority: PRP-013
 
-**Next Action**: Write & implement `prp/012-e2e-testing.md`
+**Next Action**: Write & implement `prp/013-deployment.md`
 
 **Command**: Ask Claude to review the PRP and lock decisions before implementation.
 
