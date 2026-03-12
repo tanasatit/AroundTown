@@ -49,7 +49,7 @@ export function NavBar({ userName }: Props) {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => signOut({ callbackUrl: "/login" })}
+            onClick={() => signOut({ redirectTo: "/login" })}
           >
             <LogOut className="mr-1 h-4 w-4" />
             Logout
@@ -87,7 +87,7 @@ export function NavBar({ userName }: Props) {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => signOut({ callbackUrl: "/login" })}
+              onClick={() => signOut({ redirectTo: "/login" })}
             >
               <LogOut className="mr-1 h-4 w-4" />
               Logout
