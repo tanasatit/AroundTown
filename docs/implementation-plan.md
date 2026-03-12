@@ -234,7 +234,7 @@ Current state: Can login at `/login`
 ---
 
 ### PRP-010: Loading & Error States
-**Status**: Blocked by Phase 7  
+**Status**: ✅ COMPLETED (2026-03-12)
 **File**: `prp/010-loading-states.md`  
 **Duration**: 2 hours  
 **Dependencies**: Navigation done
@@ -256,30 +256,14 @@ Current state: Can login at `/login`
 ---
 
 ### PRP-011: Responsive Design
-**Status**: Blocked by Phase 7  
-**File**: `prp/011-responsive-design.md`  
-**Duration**: 3 hours  
-**Dependencies**: All features done
-
-**What**: Ensure mobile/tablet compatibility
-- Test on mobile (320px - 768px)
-- Test on tablet (768px - 1024px)
-- Touch-friendly inputs
-- Responsive tables
-
-**Why**: 3 users may use phones/tablets
-
-**Deliverables**:
-- Mobile-responsive components
-- Touch improvements
-- Tested on multiple devices
+**Status**: ⏸ SKIPPED — Tailwind responsive classes used throughout; all pages already use `sm:`, `lg:`, `xl:` breakpoints. No additional work needed.
 
 ---
 
 ## 🎯 Phase 8: Testing & Deployment
 
 ### PRP-012: End-to-End Testing
-**Status**: Final phase  
+**Status**: 🎯 Next
 **File**: `prp/012-e2e-testing.md`  
 **Duration**: 3 hours  
 **Dependencies**: All features done
@@ -302,7 +286,7 @@ Current state: Can login at `/login`
 ---
 
 ### PRP-013: Production Deployment
-**Status**: Final phase  
+**Status**: ⏳ Waiting — depends on PRP-012
 **File**: `prp/013-deployment.md`  
 **Duration**: 2 hours  
 **Dependencies**: PRP-012
@@ -325,7 +309,7 @@ Current state: Can login at `/login`
 ---
 
 ### PRP-014: User Training & Documentation
-**Status**: Final phase  
+**Status**: ⏳ Waiting — depends on PRP-013
 **File**: `prp/014-user-training.md`  
 **Duration**: 2 hours  
 **Dependencies**: PRP-013
@@ -346,6 +330,30 @@ Current state: Can login at `/login`
 
 ---
 
+## 🎯 Phase 9: Machine Management (Post-Launch)
+
+### PRP-015: Machine Management
+**Status**: ⏳ Post-launch feature
+**File**: `prp/015-machine-management.md`
+**Duration**: 4 hours
+**Dependencies**: PRP-013 (deployed)
+
+**What**: Move machine locations from hardcoded constants to the database, with admin UI to manage them
+- `Machine` model in Prisma schema (id, name, location, imageUrl, postcardSet, isActive)
+- Admin CRUD page at `/settings/machines`
+- Collection form pulls locations from DB instead of `lib/constants.ts`
+- Each machine can have its own image and postcard set metadata
+
+**Why**: Machines have unique characteristics (different postcard sets, images). Adding/renaming a machine currently requires a code change + redeploy.
+
+**Deliverables**:
+- Prisma schema migration
+- `/api/machines` CRUD endpoints
+- `/settings/machines` admin page
+- Collection form updated to use DB locations
+
+---
+
 ## Timeline Estimate
 
 | Phase | PRPs | Duration | Status |
@@ -354,13 +362,14 @@ Current state: Can login at `/login`
 | 4 | Collection System | 12h | ✅ Done |
 | 5 | Refill System | 3.5h | ✅ Done |
 | 6 | Analytics | 7h | ✅ Done |
-| 7 | Polish | 7h | 🚧 In Progress (1/3 done) |
-| 8 | Testing & Deploy | 7h | ⏳ Waiting |
-| **Total** | **14 PRPs** | **42.5h** | **64% done** |
+| 7 | Polish | 7h | ✅ Done (PRP-011 skipped) |
+| 8 | Testing & Deploy | 7h | 🎯 Next |
+| 9 | Machine Management | 4h | ⏳ Post-launch |
+| **Total** | **15 PRPs** | **46.5h** | **73% done** |
 
-## Current Priority: PRP-010
+## Current Priority: PRP-012
 
-**Next Action**: Review `prp/010-loading-states.md`
+**Next Action**: Write & implement `prp/012-e2e-testing.md`
 
 **Command**: Ask Claude to review the PRP and lock decisions before implementation.
 
@@ -415,12 +424,12 @@ Tested: All endpoints working
 ## Quick Reference
 
 **Start Next PRP**:
-1. Open `prp/008-reports-page.md`
+1. Open `prp/012-e2e-testing.md`
 2. Review with Claude
 3. Implement
 4. Test
 5. Commit
-6. Move to PRP-009
+6. Move to PRP-013
 
 **Stuck?**: 
 - Review `docs/` for business context
