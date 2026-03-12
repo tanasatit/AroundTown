@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { logout } from "@/app/actions/auth";
 import { Menu, X, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -46,14 +46,12 @@ export function NavBar({ userName }: Props) {
 
         <div className="hidden sm:flex items-center gap-3">
           <span className="text-sm text-muted-foreground">{userName}</span>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => signOut({ redirectTo: "/login" })}
-          >
-            <LogOut className="mr-1 h-4 w-4" />
-            Logout
-          </Button>
+          <form action={logout}>
+            <Button variant="ghost" size="sm" type="submit">
+              <LogOut className="mr-1 h-4 w-4" />
+              Logout
+            </Button>
+          </form>
         </div>
 
         {/* Mobile hamburger */}
@@ -84,14 +82,12 @@ export function NavBar({ userName }: Props) {
           ))}
           <div className="border-t border-border pt-3 mt-3 flex items-center justify-between">
             <span className="text-sm text-muted-foreground">{userName}</span>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => signOut({ redirectTo: "/login" })}
-            >
-              <LogOut className="mr-1 h-4 w-4" />
-              Logout
-            </Button>
+            <form action={logout}>
+              <Button variant="ghost" size="sm" type="submit">
+                <LogOut className="mr-1 h-4 w-4" />
+                Logout
+              </Button>
+            </form>
           </div>
         </div>
       )}
