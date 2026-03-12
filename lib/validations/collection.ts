@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+// Empty number inputs send NaN via valueAsNumber — .catch(0) falls back to 0
+const exchangeField = z.number().int().min(0).catch(0);
+
 export const createCollectionSchema = z.object({
   collectionDate: z.string().refine(
     (date) => {
@@ -21,16 +24,16 @@ export const createCollectionSchema = z.object({
       message: 'Machine coins must be divisible by 4 (4 coins = 1 postcard)',
     }),
 
-  exchangeCoins1baht: z.number().int().min(0).default(0),
-  exchangeCoins2baht: z.number().int().min(0).default(0),
-  exchangeCoins5baht: z.number().int().min(0).default(0),
-  exchangeCoins10baht: z.number().int().min(0).default(0),
-  exchangeNote20baht: z.number().int().min(0).default(0),
-  exchangeNote50baht: z.number().int().min(0).default(0),
-  exchangeNote100baht: z.number().int().min(0).default(0),
-  exchangeNote500baht: z.number().int().min(0).default(0),
-  exchangeNote1000baht: z.number().int().min(0).default(0),
-  exchangeTransfer:     z.number().int().min(0).default(0),
+  exchangeCoins1baht:   exchangeField,
+  exchangeCoins2baht:   exchangeField,
+  exchangeCoins5baht:   exchangeField,
+  exchangeCoins10baht:  exchangeField,
+  exchangeNote20baht:   exchangeField,
+  exchangeNote50baht:   exchangeField,
+  exchangeNote100baht:  exchangeField,
+  exchangeNote500baht:  exchangeField,
+  exchangeNote1000baht: exchangeField,
+  exchangeTransfer:     exchangeField,
 
   postcardsRemaining: z.number().int().min(0, { message: 'Postcards remaining cannot be negative' }),
   costPerPostcard: z.number().min(1).max(50).default(13.766),
