@@ -63,7 +63,7 @@ export function CollectionDetailModal({
             </div>
           </section>
 
-          {/* Exchange Box */}
+          {/* Exchange Box*/}
           <section className="space-y-1">
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
