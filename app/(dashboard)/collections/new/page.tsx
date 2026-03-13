@@ -1,3 +1,4 @@
+import { prisma } from "@/lib/prisma";
 import { CollectionForm } from "@/components/forms/collection-form";
 
 export const metadata = {
@@ -5,7 +6,14 @@ export const metadata = {
   description: "Enter a new cash collection from the postcard vending machine",
 };
 
-export default function NewCollectionPage() {
+export default async function NewCollectionPage() {
+  const machines = await prisma.machine.findMany({
+    where: { isActive: true },
+    orderBy: { name: "asc" },
+    select: { name: true },
+  });
+  const machineNames = machines.map((m) => m.name);
+
   return (
     <div className="max-w-5xl mx-auto">
       <div className="mb-6">
@@ -14,7 +22,7 @@ export default function NewCollectionPage() {
           Enter the coin counts from your collection round.
         </p>
       </div>
-      <CollectionForm />
+      <CollectionForm machines={machineNames} />
     </div>
   );
 }

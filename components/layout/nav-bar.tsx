@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { href: "/", label: "Dashboard" },
   { href: "/collections", label: "Collections" },
   { href: "/reports", label: "Reports" },
+  { href: "/settings/machines", label: "Machines" },
 ];
 
 function navLinkClass(pathname: string, href: string) {

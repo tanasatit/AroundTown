@@ -21,6 +21,22 @@ async function main() {
   console.log('✓ Created admin user:', admin.email);
   console.log('  Password: admin123');
   console.log('  ⚠️  CHANGE THIS PASSWORD AFTER FIRST LOGIN!');
+
+  // Seed machines
+  const machineNames = [
+    "Rare Aroon - Ground Floor",
+    "Central World - 3rd Floor",
+  ];
+
+  for (const name of machineNames) {
+    await prisma.machine.upsert({
+      where: { name },
+      update: {},
+      create: { name, isActive: true },
+    });
+  }
+
+  console.log('✓ Seeded machines:', machineNames.join(', '));
 }
 
 main()

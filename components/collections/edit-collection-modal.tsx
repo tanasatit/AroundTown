@@ -10,7 +10,6 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { createCollectionSchema, type CreateCollectionFormInput } from "@/lib/validations/collection";
 import {
-  MACHINE_LOCATIONS,
   EXCHANGE_DENOMINATIONS,
   EXCHANGE_BALANCE_TARGET,
   DEFAULT_COST_PER_POSTCARD,
@@ -42,6 +41,7 @@ interface EditCollectionModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onUpdated: (updated: CollectionRow) => void;
+  machines: string[];
 }
 
 function fmt(n: number) {
@@ -53,6 +53,7 @@ export function EditCollectionModal({
   open,
   onOpenChange,
   onUpdated,
+  machines,
 }: EditCollectionModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -182,7 +183,7 @@ export function EditCollectionModal({
                   <SelectValue placeholder="Select location" />
                 </SelectTrigger>
                 <SelectContent>
-                  {MACHINE_LOCATIONS.map((loc) => (
+                  {machines.map((loc) => (
                     <SelectItem key={loc} value={loc}>{loc}</SelectItem>
                   ))}
                 </SelectContent>

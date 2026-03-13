@@ -3,6 +3,7 @@ import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HistoryTable } from "@/components/collections/history-table";
 import { getCollections } from "@/lib/collections";
+import { prisma } from "@/lib/prisma";
 
 interface PageProps {
   searchParams: Promise<{
@@ -23,15 +24,24 @@ export const metadata = {
 export default async function CollectionsPage({ searchParams }: PageProps) {
   const params = await searchParams;
 
-  const { collections, pagination } = await getCollections({
-    page: params.page ? Number(params.page) : 1,
-    location: params.location,
-    week: params.week ? Number(params.week) : undefined,
-    startDate: params.startDate,
-    endDate: params.endDate,
-    sort: params.sort,
-    order: params.order,
-  });
+  const [{ collections, pagination }, machineRows] = await Promise.all([
+    getCollections({
+      page: params.page ? Number(params.page) : 1,
+      location: params.location,
+      week: params.week ? Number(params.week) : undefined,
+      startDate: params.startDate,
+      endDate: params.endDate,
+      sort: params.sort,
+      order: params.order,
+    }),
+    prisma.machine.findMany({
+      where: { isActive: true },
+      orderBy: { name: "asc" },
+      select: { name: true },
+    }),
+  ]);
+
+  const machines = machineRows.map((m) => m.name);
 
   return (
     <div className="space-y-6">
@@ -53,6 +63,7 @@ export default async function CollectionsPage({ searchParams }: PageProps) {
       <HistoryTable
         collections={collections}
         pagination={pagination}
+        machines={machines}
         filters={{
           location: params.location,
           week: params.week,

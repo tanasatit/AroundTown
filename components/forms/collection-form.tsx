@@ -11,7 +11,6 @@ import { cn } from "@/lib/utils";
 import { createCollectionSchema, type CreateCollectionInput, type CreateCollectionFormInput } from "@/lib/validations/collection";
 import { getCurrentWeekNumber } from "@/lib/calculations";
 import {
-  MACHINE_LOCATIONS,
   EXCHANGE_DENOMINATIONS,
   EXCHANGE_BALANCE_TARGET,
   DEFAULT_COST_PER_POSTCARD,
@@ -45,7 +44,7 @@ function useDebounce<T>(value: T, delay: number): T {
   return debouncedValue;
 }
 
-export function CollectionForm() {
+export function CollectionForm({ machines }: { machines: string[] }) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showRoundWeek, setShowRoundWeek] = useState(false);
@@ -224,7 +223,7 @@ export function CollectionForm() {
                       <SelectValue placeholder="Select location" />
                     </SelectTrigger>
                     <SelectContent>
-                      {MACHINE_LOCATIONS.map((location) => (
+                      {machines.map((location) => (
                         <SelectItem key={location} value={location}>{location}</SelectItem>
                       ))}
                     </SelectContent>

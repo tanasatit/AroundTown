@@ -60,6 +60,16 @@ model Collection {
   @@map("collections")
 }
 
+model Machine {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique @db.VarChar(200)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("machines")
+}
+
 model Refill {
   id              Int      @id @default(autoincrement())
   refillDate      DateTime @db.Date

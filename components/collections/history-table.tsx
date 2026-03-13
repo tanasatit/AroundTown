@@ -33,7 +33,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MACHINE_LOCATIONS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import type { CollectionRow } from "@/lib/collections";
 
@@ -47,6 +46,7 @@ interface Pagination {
 interface HistoryTableProps {
   collections: CollectionRow[];
   pagination: Pagination;
+  machines: string[];
   filters: {
     location?: string;
     week?: string;
@@ -68,7 +68,7 @@ function SortIcon({ col, sort, order }: { col: string; sort: string; order: stri
     : <ArrowDown className="ml-1 h-3.5 w-3.5" />;
 }
 
-export function HistoryTable({ collections: initialCollections, pagination, filters }: HistoryTableProps) {
+export function HistoryTable({ collections: initialCollections, pagination, machines, filters }: HistoryTableProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -137,7 +137,7 @@ export function HistoryTable({ collections: initialCollections, pagination, filt
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All locations</SelectItem>
-              {MACHINE_LOCATIONS.map((loc) => (
+              {machines.map((loc) => (
                 <SelectItem key={loc} value={loc}>{loc}</SelectItem>
               ))}
             </SelectContent>
@@ -362,6 +362,7 @@ export function HistoryTable({ collections: initialCollections, pagination, filt
         open={editCollection !== null}
         onOpenChange={(open) => { if (!open) setEditCollection(null); }}
         onUpdated={handleUpdated}
+        machines={machines}
       />
       <DeleteConfirmDialog
         collectionId={deleteId ?? 0}
