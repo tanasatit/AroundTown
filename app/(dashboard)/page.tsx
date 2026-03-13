@@ -1,3 +1,5 @@
+export const revalidate = 300;
+
 import { Suspense } from "react";
 import Link from "next/link";
 import { Plus } from "lucide-react";

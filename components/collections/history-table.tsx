@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 import { ArrowUpDown, ArrowUp, ArrowDown, MoreHorizontal, Eye, Pencil, Trash2 } from "lucide-react";
@@ -73,13 +73,13 @@ export function HistoryTable({ collections: initialCollections, pagination, mach
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [deletedIds, setDeletedIds] = useState<Set<number>>(new Set());
   const [rows, setRows] = useState<CollectionRow[]>(initialCollections);
+  const [prevInitial, setPrevInitial] = useState(initialCollections);
 
-  useEffect(() => {
+  if (prevInitial !== initialCollections) {
+    setPrevInitial(initialCollections);
     setRows(initialCollections);
-    setDeletedIds(new Set());
-  }, [initialCollections]);
+  }
   const [viewCollection, setViewCollection] = useState<CollectionRow | null>(null);
   const [editCollection, setEditCollection] = useState<CollectionRow | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
@@ -111,7 +111,6 @@ export function HistoryTable({ collections: initialCollections, pagination, mach
   }
 
   function handleDeleted(id: number) {
-    setDeletedIds((prev) => new Set(prev).add(id));
     setRows((prev) => prev.filter((r) => r.id !== id));
   }
 

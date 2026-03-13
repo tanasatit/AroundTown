@@ -4,6 +4,8 @@ import { LocationTable } from "@/components/reports/location-table";
 import { ExportButton } from "@/components/reports/export-button";
 import { getReportsData } from "@/lib/reports";
 
+export const revalidate = 300;
+
 export const metadata = {
   title: "Reports | SeeYou AroundTown",
 };

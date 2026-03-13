@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidateTag } from 'next/cache';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { updateCollectionSchema } from '@/lib/validations/collection';
@@ -127,6 +128,8 @@ export async function PUT(request: NextRequest, context: RouteContext) {
 
     const calculations = calculateCollectionMetrics(collection);
 
+    revalidateTag('collections', {});
+
     return NextResponse.json({ ...collection, ...calculations });
   } catch (error) {
     console.error('PUT /api/collections/[id] error:', error);
@@ -159,6 +162,8 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
     await prisma.collection.delete({
       where: { id: collectionId },
     });
+
+    revalidateTag('collections', {});
 
     return NextResponse.json({ message: 'Collection deleted successfully' });
   } catch (error) {
