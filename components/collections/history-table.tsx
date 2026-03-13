@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
-import { ArrowUpDown, ArrowUp, ArrowDown, Eye, Trash2 } from "lucide-react";
+import { ArrowUpDown, ArrowUp, ArrowDown, MoreHorizontal, Eye, Pencil, Trash2 } from "lucide-react";
 import { Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,7 +24,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { CollectionDetailModal } from "./collection-detail-modal";
+import { EditCollectionModal } from "./edit-collection-modal";
 import { DeleteConfirmDialog } from "./delete-confirm-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { MACHINE_LOCATIONS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import type { CollectionRow } from "@/lib/collections";
@@ -66,13 +74,16 @@ export function HistoryTable({ collections: initialCollections, pagination, filt
   const searchParams = useSearchParams();
 
   const [deletedIds, setDeletedIds] = useState<Set<number>>(new Set());
+  const [rows, setRows] = useState<CollectionRow[]>(initialCollections);
+
+  useEffect(() => {
+    setRows(initialCollections);
+    setDeletedIds(new Set());
+  }, [initialCollections]);
   const [viewCollection, setViewCollection] = useState<CollectionRow | null>(null);
+  const [editCollection, setEditCollection] = useState<CollectionRow | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
-  const rows = useMemo(
-    () => initialCollections.filter((r) => !deletedIds.has(r.id)),
-    [initialCollections, deletedIds]
-  );
 
   const sort = filters.sort ?? "date";
   const order = filters.order ?? "desc";
@@ -101,6 +112,11 @@ export function HistoryTable({ collections: initialCollections, pagination, filt
 
   function handleDeleted(id: number) {
     setDeletedIds((prev) => new Set(prev).add(id));
+    setRows((prev) => prev.filter((r) => r.id !== id));
+  }
+
+  function handleUpdated(updated: CollectionRow) {
+    setRows((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
   }
 
   const hasFilters =
@@ -266,33 +282,39 @@ export function HistoryTable({ collections: initialCollections, pagination, filt
                   </TableCell>
                   <TableCell>
                     <Badge
-                      variant={row.exchangeBalanced ? "default" : "destructive"}
-                      className={cn("text-xs", row.exchangeBalanced ? "bg-green-600 hover:bg-green-700" : "")}
+                      variant="outline"
+                      className={cn("text-xs", row.exchangeBalanced ? "bg-green-600/30 text-green-400 hover:bg-green-600/40 border-green-600/40" : "bg-red-600/30 text-red-400 hover:bg-red-600/40 border-red-600/40")}
                     >
                       {row.exchangeBalanced ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <div className="flex justify-end gap-1">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-7 w-7"
-                        onClick={() => setViewCollection(row)}
-                        title="View details"
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-7 w-7 text-destructive hover:text-destructive"
-                        onClick={() => setDeleteId(row.id)}
-                        title="Delete"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-7 w-7">
+                          <MoreHorizontal className="h-4 w-4" />
+                          <span className="sr-only">Actions</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => setViewCollection(row)}>
+                          <Eye className="mr-2 h-4 w-4" />
+                          Preview
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setEditCollection(row)}>
+                          <Pencil className="mr-2 h-4 w-4" />
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          className="text-destructive focus:text-destructive"
+                          onClick={() => setDeleteId(row.id)}
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               ))}
@@ -334,6 +356,12 @@ export function HistoryTable({ collections: initialCollections, pagination, filt
         collection={viewCollection}
         open={viewCollection !== null}
         onOpenChange={(open) => { if (!open) setViewCollection(null); }}
+      />
+      <EditCollectionModal
+        collection={editCollection}
+        open={editCollection !== null}
+        onOpenChange={(open) => { if (!open) setEditCollection(null); }}
+        onUpdated={handleUpdated}
       />
       <DeleteConfirmDialog
         collectionId={deleteId ?? 0}

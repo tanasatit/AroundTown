@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Check, X, ChevronDown, ChevronUp, PackagePlus } from "lucide-react";
+import { Loader2, Check, X, ChevronDown, ChevronUp } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -49,7 +49,6 @@ export function CollectionForm() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showRoundWeek, setShowRoundWeek] = useState(false);
-  const [showRefill, setShowRefill] = useState(false);
 
   const form = useForm<CreateCollectionFormInput>({
     resolver: zodResolver(createCollectionSchema),
@@ -131,7 +130,7 @@ export function CollectionForm() {
 
       // 2. Save refill if postcardsAdded > 0
       let refillSaved = false;
-      if (showRefill && data.postcardsAdded && data.postcardsAdded > 0) {
+      if (data.postcardsAdded && data.postcardsAdded > 0) {
         const refillRes = await fetch("/api/refills", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -168,7 +167,6 @@ export function CollectionForm() {
               postcardsAdded:     undefined,
               notes: "",
             });
-            setShowRefill(false);
           },
         },
       });
@@ -322,8 +320,8 @@ export function CollectionForm() {
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg">Exchange Box</CardTitle>
                 <Badge
-                  variant={calculations.exchangeBalanced ? "default" : "destructive"}
-                  className={cn(calculations.exchangeBalanced ? "bg-green-600 hover:bg-green-700" : "")}
+                  variant="outline"
+                  className={cn(calculations.exchangeBalanced ? "bg-green-600/30 text-green-400 hover:bg-green-600/40 border-green-600/40" : "bg-red-600/30 text-red-400 hover:bg-red-600/40 border-red-600/40")}
                 >
                   {calculations.exchangeBalanced
                     ? <><Check className="mr-1 h-3 w-3" />Balanced</>
@@ -399,65 +397,45 @@ export function CollectionForm() {
                   <p className="text-sm text-destructive">{errors.postcardsRemaining.message}</p>
                 )}
               </div>
-
-              <div className="border-t pt-4">
-                <button
-                  type="button"
-                  className={cn(
-                    "flex items-center gap-2 text-sm font-medium transition-colors",
-                    showRefill ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-                  )}
-                  onClick={() => setShowRefill(!showRefill)}
-                >
-                  <PackagePlus className="h-4 w-4" />
-                  {showRefill ? "Cancel refill" : "Refill postcards now?"}
-                </button>
-              </div>
             </CardContent>
           </Card>
 
           {/* Refill */}
-          {showRefill ? (
-            <Card>
-              <CardHeader className="pb-4">
-                <CardTitle className="text-lg">Refill</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="postcardsAdded">Postcards Added</Label>
-                  <Input
-                    id="postcardsAdded"
-                    type="number"
-                    min={1}
-                    placeholder="e.g. 200"
-                    {...register("postcardsAdded", { valueAsNumber: true })}
-                  />
-                  {errors.postcardsAdded && (
-                    <p className="text-sm text-destructive">{errors.postcardsAdded.message}</p>
-                  )}
-                </div>
+          <Card>
+            <CardHeader className="pb-4">
+              <CardTitle className="text-lg">Refill</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="postcardsAdded">Postcards Added</Label>
+                <Input
+                  id="postcardsAdded"
+                  type="number"
+                  min={0}
+                  placeholder="0 if no refill"
+                  {...register("postcardsAdded", { valueAsNumber: true })}
+                />
+                {errors.postcardsAdded && (
+                  <p className="text-sm text-destructive">{errors.postcardsAdded.message}</p>
+                )}
+              </div>
 
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="p-3 rounded-lg bg-muted/50 text-center">
-                    <p className="text-xs text-muted-foreground">Before</p>
-                    <p className="text-xl font-semibold">{debouncedValues.postcardsRemaining || 0}</p>
-                  </div>
-                  <div className="p-3 rounded-lg bg-muted/50 text-center">
-                    <p className="text-xs text-muted-foreground">Added</p>
-                    <p className="text-xl font-semibold text-thai-gold">+{debouncedValues.postcardsAdded || 0}</p>
-                  </div>
-                  <div className="p-3 rounded-lg bg-muted/50 text-center">
-                    <p className="text-xs text-muted-foreground">After</p>
-                    <p className="text-xl font-semibold text-green-500">{calculations.postcardsAfter}</p>
-                  </div>
+              <div className="grid grid-cols-3 gap-3">
+                <div className="p-3 rounded-lg bg-muted/50 text-center">
+                  <p className="text-xs text-muted-foreground">Before</p>
+                  <p className="text-xl font-semibold">{debouncedValues.postcardsRemaining || 0}</p>
                 </div>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="border border-dashed rounded-lg p-4 text-center text-muted-foreground text-sm">
-              No refill this round
-            </div>
-          )}
+                <div className="p-3 rounded-lg bg-muted/50 text-center">
+                  <p className="text-xs text-muted-foreground">Added</p>
+                  <p className="text-xl font-semibold text-thai-gold">+{debouncedValues.postcardsAdded || 0}</p>
+                </div>
+                <div className="p-3 rounded-lg bg-muted/50 text-center">
+                  <p className="text-xs text-muted-foreground">After</p>
+                  <p className="text-xl font-semibold text-green-500">{calculations.postcardsAfter}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Summary */}
           <Card>
@@ -520,7 +498,7 @@ export function CollectionForm() {
             {isSubmitting ? (
               <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Saving...</>
             ) : (
-              showRefill ? "Save Collection & Refill" : "Save Collection"
+              "Save Collection"
             )}
           </Button>
         </div>

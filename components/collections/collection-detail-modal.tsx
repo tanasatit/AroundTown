@@ -70,8 +70,8 @@ export function CollectionDetailModal({
                 Exchange Box
               </h3>
               <Badge
-                variant={collection.exchangeBalanced ? "default" : "destructive"}
-                className={cn(collection.exchangeBalanced ? "bg-green-600 hover:bg-green-700" : "")}
+                variant="outline"
+                className={cn(collection.exchangeBalanced ? "bg-green-600/30 text-green-400 hover:bg-green-600/40 border-green-600/40" : "bg-red-600/30 text-red-400 hover:bg-red-600/40 border-red-600/40")}
               >
                 {collection.exchangeBalanced ? (
                   <><Check className="mr-1 h-3 w-3" />Balanced</>
