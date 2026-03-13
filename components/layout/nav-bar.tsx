@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { logout } from "@/app/actions/auth";
 import { Menu, X, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,13 @@ interface Props {
 
 export function NavBar({ userName }: Props) {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  async function handleLogout() {
+    await logout();
+    router.push("/login");
+  }
 
   return (
     <>
@@ -46,12 +52,10 @@ export function NavBar({ userName }: Props) {
 
         <div className="hidden sm:flex items-center gap-3">
           <span className="text-sm text-muted-foreground">{userName}</span>
-          <form action={logout}>
-            <Button variant="ghost" size="sm" type="submit">
-              <LogOut className="mr-1 h-4 w-4" />
-              Logout
-            </Button>
-          </form>
+          <Button variant="ghost" size="sm" onClick={handleLogout}>
+            <LogOut className="mr-1 h-4 w-4" />
+            Logout
+          </Button>
         </div>
 
         {/* Mobile hamburger */}
@@ -82,12 +86,10 @@ export function NavBar({ userName }: Props) {
           ))}
           <div className="border-t border-border pt-3 mt-3 flex items-center justify-between">
             <span className="text-sm text-muted-foreground">{userName}</span>
-            <form action={logout}>
-              <Button variant="ghost" size="sm" type="submit">
-                <LogOut className="mr-1 h-4 w-4" />
-                Logout
-              </Button>
-            </form>
+            <Button variant="ghost" size="sm" onClick={handleLogout}>
+              <LogOut className="mr-1 h-4 w-4" />
+              Logout
+            </Button>
           </div>
         </div>
       )}
