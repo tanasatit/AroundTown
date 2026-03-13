@@ -1,3 +1,4 @@
+import { unstable_cache } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { calculateCollectionMetrics } from '@/lib/calculations';
 
@@ -36,7 +37,13 @@ export interface ReportsData {
 
 const ZERO_TOTALS: ReportsTotals = { collections: 0, postcardsSold: 0, revenue: 0, cost: 0, profit: 0 };
 
-export async function getReportsData(): Promise<ReportsData> {
+export const getReportsData = unstable_cache(
+  async (): Promise<ReportsData> => getReportsDataImpl(),
+  ['reports-data'],
+  { revalidate: 300, tags: ['collections'] }
+);
+
+async function getReportsDataImpl(): Promise<ReportsData> {
   const rows = await prisma.collection.findMany({ orderBy: { collectionDate: 'desc' } });
 
   if (rows.length === 0) {

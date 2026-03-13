@@ -57,6 +57,7 @@ model Collection {
   @@index([collectionDate])
   @@index([weekNumber])
   @@index([machineLocation])
+  @@index([collectionDate, machineLocation])
   @@map("collections")
 }
 

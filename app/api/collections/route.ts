@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidateTag } from 'next/cache';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { createCollectionSchema, listCollectionsQuerySchema } from '@/lib/validations/collection';
@@ -71,6 +72,8 @@ export async function POST(request: NextRequest) {
     });
 
     const calculations = calculateCollectionMetrics(collection);
+
+    revalidateTag('collections', {});
 
     return NextResponse.json({ ...collection, ...calculations }, { status: 201 });
   } catch (error) {
