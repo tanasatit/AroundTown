@@ -436,29 +436,14 @@ export function CollectionForm({ machines }: { machines: string[] }) {
             </CardContent>
           </Card>
 
-          {/* Summary */}
+          {/* Cost per Postcard */}
           <Card>
             <CardHeader className="pb-4">
-              <CardTitle className="text-lg">Summary</CardTitle>
+              <CardTitle className="text-lg">Cost per Postcard</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-3 gap-3">
-                <div className="p-4 rounded-lg bg-muted/50">
-                  <p className="text-sm text-muted-foreground">Revenue</p>
-                  <p className="text-xl font-semibold text-thai-gold">฿{fmt(calculations.revenue)}</p>
-                </div>
-                <div className="p-4 rounded-lg bg-muted/50">
-                  <p className="text-sm text-muted-foreground">Cost</p>
-                  <p className="text-xl font-semibold text-destructive">฿{fmt(calculations.cost)}</p>
-                </div>
-                <div className="p-4 rounded-lg bg-muted/50">
-                  <p className="text-sm text-muted-foreground">Profit</p>
-                  <p className="text-xl font-semibold text-green-500">฿{fmt(calculations.profit)}</p>
-                </div>
-              </div>
-
+            <CardContent>
               <div className="space-y-2">
-                <Label htmlFor="costPerPostcard">Cost per Postcard</Label>
+                <Label htmlFor="costPerPostcard">Cost per Postcard (฿)</Label>
                 <Input
                   id="costPerPostcard"
                   type="number"

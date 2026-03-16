@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { WeeklySummaryTable } from "@/components/reports/weekly-summary-table";
 import { LocationTable } from "@/components/reports/location-table";
+import { MonthMachineTable } from "@/components/reports/month-machine-table";
 import { ExportButton } from "@/components/reports/export-button";
 import { getReportsData } from "@/lib/reports";
 
@@ -44,6 +45,15 @@ export default async function ReportsPage() {
             </CardHeader>
             <CardContent className="p-0 pb-2">
               <LocationTable byLocation={data.byLocation} totals={data.totals} />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-4">
+              <CardTitle className="text-lg">Monthly by Machine</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0 pb-2">
+              <MonthMachineTable rows={data.byMonthMachine} />
             </CardContent>
           </Card>
         </>

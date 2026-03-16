@@ -71,6 +71,14 @@ model Machine {
   @@map("machines")
 }
 
+model AppSetting {
+  key       String   @id @db.VarChar(100)
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+
+  @@map("app_settings")
+}
+
 model Refill {
   id              Int      @id @default(autoincrement())
   refillDate      DateTime @db.Date

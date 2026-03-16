@@ -28,9 +28,20 @@ export interface ReportsTotals {
   profit: number;
 }
 
+export interface MonthMachineRow {
+  monthLabel: string;
+  year: number;
+  monthNum: number;
+  location: string;
+  collections: number;
+  postcardsSold: number;
+  revenue: number;
+}
+
 export interface ReportsData {
   byWeek: WeekSummaryRow[];
   byLocation: LocationRow[];
+  byMonthMachine: MonthMachineRow[];
   totals: ReportsTotals;
   isEmpty: boolean;
 }
@@ -47,11 +58,14 @@ async function getReportsDataImpl(): Promise<ReportsData> {
   const rows = await prisma.collection.findMany({ orderBy: { collectionDate: 'desc' } });
 
   if (rows.length === 0) {
-    return { byWeek: [], byLocation: [], totals: { ...ZERO_TOTALS }, isEmpty: true };
+    return { byWeek: [], byLocation: [], byMonthMachine: [], totals: { ...ZERO_TOTALS }, isEmpty: true };
   }
 
   const weekMap = new Map<number, WeekSummaryRow>();
   const locationMap = new Map<string, LocationRow>();
+  const monthMachineMap = new Map<string, MonthMachineRow>();
+
+  const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
   for (const row of rows) {
     const m = calculateCollectionMetrics(row);
@@ -91,10 +105,37 @@ async function getReportsDataImpl(): Promise<ReportsData> {
       cost: loc.cost + m.cost,
       profit: loc.profit + m.profit,
     });
+
+    // By month + machine
+    const date = new Date(row.collectionDate);
+    const year = date.getFullYear();
+    const monthNum = date.getMonth() + 1; // 1–12
+    const monthLabel = `${MONTH_NAMES[monthNum - 1]} ${year}`;
+    const mmKey = `${year}-${String(monthNum).padStart(2, '0')}|${row.machineLocation}`;
+    const mm = monthMachineMap.get(mmKey) ?? {
+      monthLabel,
+      year,
+      monthNum,
+      location: row.machineLocation,
+      collections: 0,
+      postcardsSold: 0,
+      revenue: 0,
+    };
+    monthMachineMap.set(mmKey, {
+      ...mm,
+      collections: mm.collections + 1,
+      postcardsSold: mm.postcardsSold + m.postcardsSold,
+      revenue: mm.revenue + m.revenue,
+    });
   }
 
   const byWeek = Array.from(weekMap.values()).sort((a, b) => b.weekNumber - a.weekNumber);
   const byLocation = Array.from(locationMap.values()).sort((a, b) => b.profit - a.profit);
+  const byMonthMachine = Array.from(monthMachineMap.values()).sort((a, b) => {
+    if (b.year !== a.year) return b.year - a.year;
+    if (b.monthNum !== a.monthNum) return b.monthNum - a.monthNum;
+    return a.location.localeCompare(b.location);
+  });
 
   const totals = byWeek.reduce(
     (acc, w) => ({
@@ -107,5 +148,5 @@ async function getReportsDataImpl(): Promise<ReportsData> {
     { ...ZERO_TOTALS }
   );
 
-  return { byWeek, byLocation, totals, isEmpty: false };
+  return { byWeek, byLocation, byMonthMachine, totals, isEmpty: false };
 }

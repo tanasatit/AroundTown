@@ -248,14 +248,6 @@ export function HistoryTable({ collections: initialCollections, pagination, mach
                     Revenue <SortIcon col="revenue" sort={sort} order={order} />
                   </button>
                 </TableHead>
-                <TableHead className="text-right">
-                  <button
-                    className="flex items-center ml-auto hover:text-foreground transition-colors"
-                    onClick={() => handleSort("profit")}
-                  >
-                    Profit <SortIcon col="profit" sort={sort} order={order} />
-                  </button>
-                </TableHead>
                 <TableHead>Balance</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
@@ -275,9 +267,6 @@ export function HistoryTable({ collections: initialCollections, pagination, mach
                   <TableCell className="text-right">{row.postcardsSold}</TableCell>
                   <TableCell className="text-right text-thai-gold font-medium">
                     {fmt(row.revenue)}
-                  </TableCell>
-                  <TableCell className={cn("text-right font-medium", row.profit >= 0 ? "text-green-500" : "text-destructive")}>
-                    {fmt(row.profit)}
                   </TableCell>
                   <TableCell>
                     <Badge
